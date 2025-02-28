@@ -1,0 +1,29 @@
+volumes:
+  pg_data:
+  static:
+
+services:
+  db:
+    env_file: .env
+    image: postgres:13.10
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  web:
+    env_file: .env
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    volumes:
+      - static:/static_dev
+    depends_on:
+      - db
+  nginx:
+    build: ./docker/nginx/
+    ports:
+      - 8000:80
+    depends_on:
+      - web
+    volumes:
+      - static:/static

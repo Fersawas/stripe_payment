@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1 class="display-3 text-danger">400</h1>
+    <h2 class="text-dark">Неверный запрос</h2>
+    <p class="lead text-muted">Что-то пошло не так! Ваш запрос не может быть обработан.</p>
+
+    <div class="mt-4">
+        <a href="{% url 'payment:items_list' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-home"></i> Вернуться на главную
+        </a>
+    </div>
+
+    <div class="mt-5">
+        <p class="text-muted">Если ошибка повторяется, попробуйте <a href="{% url 'payment:items_list' %}">обновить страницу</a> или
+{% endblock %}

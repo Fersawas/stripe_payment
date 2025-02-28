@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4 text-center">Каталог товаров</h1>
+
+    <div class="row">
+        {% for item in items %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text text-muted">{{ item.description|truncatewords:15 }}</p>
+                        <h6 class="text-primary">{{ item.price }} {{ item.currency }}</h6>
+                        <a href={% url 'payment:item_detail' item.id %} class="btn btn-outline-primary">Подробнее</a>
+                        <button class="btn btn-outline-primary add_order" data-item-id="{{ item.id }}">В корзину</button>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Нет доступных товаров.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const addToCartButtons = document.querySelectorAll('.add_order');
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = button.getAttribute('data-item-id');
+                
+                fetch("{% url 'payment:add_to_order' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ "item_id": itemId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Товар добавлен в корзину.");
+                    } else {
+                        alert("Ошибка добавления товара в корзину.");
+                    }
+                })
+                .catch(error => {
+                    alert("Ошибка при добавлении товара в корзину.");
+                });
+            });
+        });
+    });
+</script>
+
+{% endblock %}
