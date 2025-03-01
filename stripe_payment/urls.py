@@ -22,5 +22,5 @@ handler400 = "pages.views.page_error"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("payment/", include("payment.urls")),
+    path("", include("payment.urls")),
 ]
